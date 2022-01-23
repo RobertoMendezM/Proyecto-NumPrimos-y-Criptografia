@@ -1,0 +1,215 @@
+%
+%  Para los marcos de teoremas, ejemplos,
+%					y definiciones.
+% 
+%  \begin{D1ejemplo}[-algún texto].
+%
+%  \end{D1ejemplo}
+
+%  Editor: Roberto Méndez Méndez
+%  Última edición: Agosto 2015
+%        --   2-Noviembere-2018   (hay otra mejor) --
+%           15-Abr-2020
+%          11-Oct-2021  
+%  Nombre anterior: Diseno_TeoDefEjem.tex
+
+
+\usepackage[shortlabels]{enumitem}
+
+
+
+
+\usepackage{tikz}
+%\usetikzlibrary{tikzmark} NUNCA SE UTILIZA
+%\usepackage{tkz-tab}% EN DESHUSO
+\usetikzlibrary{matrix,arrows, positioning,shadows,shadings,backgrounds,
+calc}
+
+\usepackage{tcolorbox, empheq, xparse}%
+\tcbuselibrary{skins,breakable,listings,theorems}
+
+
+%   FORMATO TEOREMAS 
+
+\definecolor{colordominanteD}{RGB}{74,0,148}
+
+\newcounter{tcbteo}[section] % Contador
+ %\renewcommand{\thetcbteo}{\thesection.\arabic{tcbteo}}% Formato 1.1,1.2
+\renewcommand{\thetcbteo}{\arabic{tcbteo})}
+
+
+% Estilo "nodoTeorema" para nodos
+\tikzset{nodoTeorema/.style={%
+rectangle, top color=gray!5, bottom color=gray!5,
+inner sep=1mm,anchor=west,font=\small\bf\sffamily}
+}
+% Caja de entorno
+\newtcolorbox{cajaTeorema}[3][]{%
+% Opciones generales
+arc=0mm,breakable,enhanced,colback=gray!5,boxrule=0pt,top=7mm,
+drop fuzzy shadow, fontupper=\normalsize,
+% label
+step and label={tcbteo}{#3},
+interior style={color=yellow!10!white},
+overlay unbroken= {%
+% Borde superior grueso.
+% "--+(0pt,3pt)" significa: 3pt hacia arriba desde la posición anterior
+\draw[colordominanteD,line width =2.5cm]
+([xshift=1.25cm, yshift=0cm]frame.north west)--+(0pt,3pt);
+% Borde superior 1
+\draw[color=colordominanteD,line width =0.2pt]
+(frame.north west)--([xshift=0pt]frame.north east);
+% Caja Teorema-contador
+\node[nodoTeorema](tituloteo)
+at ([xshift=0.2cm, yshift=-4mm]frame.north west)
+{\textbf{\color{colordominanteD} Teorema \thetcbteo \;#2}};
+},
+overlay first = {
+% Borde superior grueso
+\draw[colordominanteD,line width =2.5cm]
+([xshift=1.25cm, yshift=0cm]frame.north west)--+(0pt,3pt);
+% Borde superior 1
+\draw[color=colordominanteD,line width =0.2pt]
+(frame.north west)--([xshift=0pt]frame.north east);
+% Caja Teorema-contador
+\node[nodoTeorema](tituloteo)
+at ([xshift=0.2cm, yshift=-4mm]frame.north west)
+{\textbf{\color{colordominanteD} Teorema \thetcbteo \;#2}};
+}, %First
+% Nada que mantener en los cambios de página
+overlay middle = { },
+overlay last = { }
+#1}
+
+%- Uso \begin{teorema}... o \begin{teorema}[de tal] o \begin{teorema}[][ref]
+\NewDocumentEnvironment{teoremaf2}{O{} O{} O{}}{
+\bigskip\begin{cajaTeorema}{#1}{#2}%
+#3
+}{\end{cajaTeorema}\bigskip } 
+%%%%%%%%%%%%%%%%% FIN FORMATO TEOREMA
+
+
+%%%%%%%%%%%    FORMATO EJEMPLO
+
+\newcounter{tcbejem}[section]
+% \renewcommand{\thetcbejem}{\thesection.\arabic{tcbejem}} 
+\renewcommand{\thetcbejem}{\arabic{tcbejem})}
+
+\definecolor{colordominanteEj}{RGB}{34,159,159}
+
+\tikzset{
+    wnodeTeorema/.style={%
+         rectangle,  top color=gray!5, bottom color=gray!5,
+         inner sep=1mm,anchor=west,font=\small\bf\sffamily},
+   wnodeminimo/.style={%
+         rectangle,  top color=white, bottom color=white,
+         text=azulF,inner sep=1mm,anchor=west,font=\small\bf\sffamily}      
+}
+
+% % Ejemplo---------------------------------------------------
+\newtcolorbox{wwejemplo}[3][]{%
+arc=0mm,breakable,enhanced,colback=gray!5,boxrule=0pt,
+top=6mm,fontupper=\normalsize,step and label={tcbejem}{#3},
+interior style={color=blue!3!white},
+overlay unbroken  = {
+%borde
+\draw[color=gray!20,line width=0.2pt] (frame.north west)
+  --([xshift=0pt]frame.north east)
+  --([xshift=0pt]frame.south east);
+%  --([xshift=0pt]frame.south west)--(frame.north west);
+%barra vertical
+\draw[color=colordominanteEj,line width=3pt] ([xshift=2pt] frame.north west)--([xshift=2pt] frame.south west);          
+%Caja de Título: defi --
+\node[wnodeTeorema](titulodefi) at ([xshift=4.5pt, yshift=-3mm]frame.north west)
+{\textbf{Ejemplo \thetcbejem \;#2}};
+                }, %overlay
+overlay first  = {
+%borde
+\draw[color=gray!20,line width=0.2pt] (frame.north west)
+  --([xshift=0pt]frame.north east)
+  --([xshift=0pt]frame.south east);
+%  --([xshift=0pt]frame.south west)--(frame.north west);
+%barra vertical
+\draw[color=colordominanteEj,line width=3pt] ([xshift=2pt] frame.north west)--([xshift=2pt] frame.south west);          
+%Caja de Título: defi --
+\node[wnodeTeorema](titulodefi) at ([xshift=4.5pt, yshift=-3mm]frame.north west)
+{\textbf{Ejemplo \thetcbejem \;#2}};
+                }, %overlay
+% Mantener borde en cambio de página
+overlay last    = {
+%borde
+\draw[color=gray!20,line width=0.2pt] (frame.north west)
+  --([xshift=0pt]frame.north east)
+  --([xshift=0pt]frame.south east);
+%  --([xshift=0pt]frame.south west)--(frame.north west);
+%barra vertical
+\draw[color=colordominanteEj,line width=3pt] ([xshift=2pt] frame.north west)--([xshift=2pt] frame.south west);}
+#1}
+%-
+\NewDocumentEnvironment{ejemplof2}{O{} O{} O{}}{\smallskip\begin{wwejemplo}{#1}{#2}%
+ #3}{\end{wwejemplo}\smallskip }
+ 
+% %FIN EJEMPLO ----------------------
+
+%%%%%%%%%%%    FORMATO DEFINICION
+\newcounter{tcbdefi}[section]
+%\renewcommand{\thetcbdefi}{\thesection.\arabic{tcbdefi}}
+\renewcommand{\thetcbdefi}{\arabic{tcbdefi})}
+
+\definecolor{colordominante}{RGB}{243,102,25}
+
+\tikzset{
+    wnodeTeorema/.style={%
+         rectangle,  top color=gray!5, bottom color=gray!5,
+         inner sep=1mm,anchor=west,font=\small\bf\sffamily},
+   wnodeminimo/.style={%
+         rectangle,  top color=white, bottom color=white,
+         text=azulF,inner sep=1mm,anchor=west,font=\small\bf\sffamily}      
+}
+
+% % Definición---------------------------------------------------
+\newtcolorbox{wwdefinicion}[3][]{%
+arc=0mm,breakable,enhanced,colback=gray!5,boxrule=0pt,
+top=6mm,fontupper=\normalsize,step and label={tcbdefi}{#3},
+interior style={color=blue!5!white},
+overlay unbroken  = {
+%borde
+\draw[color=gray!20,line width=0.2pt] (frame.north west)
+  --([xshift=0pt]frame.north east)
+  --([xshift=0pt]frame.south east);
+%  --([xshift=0pt]frame.south west)--(frame.north west);
+%barra vertical
+\draw[color=colordominante,line width=3pt] ([xshift=2pt] frame.north west)--([xshift=2pt] frame.south west);          
+%Caja de Título: defi --
+\node[wnodeTeorema](titulodefi) at ([xshift=4.5pt, yshift=-3mm]frame.north west)
+{\textbf{Definición \thetcbdefi \;#2}};
+                }, %overlay
+overlay first  = {
+%borde
+\draw[color=gray!20,line width=0.2pt] (frame.north west)
+  --([xshift=0pt]frame.north east)
+  --([xshift=0pt]frame.south east);
+%  --([xshift=0pt]frame.south west)--(frame.north west);
+%barra vertical
+\draw[color=colordominante,line width=3pt] ([xshift=2pt] frame.north west)--([xshift=2pt] frame.south west);          
+%Caja de Título: defi --
+\node[wnodeTeorema](titulodefi) at ([xshift=4.5pt, yshift=-3mm]frame.north west)
+{\textbf{Definición \thetcbdefi \;#2}};
+                }, %overlay
+% Mantener borde en cambio de página
+overlay last    = {
+%borde
+\draw[color=gray!20,line width=0.2pt] (frame.north west)
+  --([xshift=0pt]frame.north east)
+  --([xshift=0pt]frame.south east);
+%  --([xshift=0pt]frame.south west)--(frame.north west);
+%barra vertical
+\draw[color=colordominante,line width=3pt] ([xshift=2pt] frame.north west)--([xshift=2pt] frame.south west);}
+#1}
+%-
+\NewDocumentEnvironment{definicionf2}{O{} O{} O{}}{\smallskip\begin{wwdefinicion}{#1}{#2}%
+ #3}{\end{wwdefinicion}\smallskip }
+% %DEFINICION----------------------
+
+
+
